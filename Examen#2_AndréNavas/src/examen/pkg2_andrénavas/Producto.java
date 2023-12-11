@@ -18,14 +18,14 @@ public class Producto {
     private long id;
     private String estado;
     private int precio;
-    
-    private static Producto PRODUCTO_NO_ENCONTRADO = new Producto("", "");
 
-    private static ArrayList<Producto> Inventario = new ArrayList<>(); 
-    
-    public Producto(String nombre, String autor) {
+    static Producto PRODUCTO_NO_ENCONTRADO = new Producto("", 0);
+
+    private static ArrayList<Producto> Inventario = new ArrayList<>();
+
+    public Producto(String nombre, int precio) {
         this.nombre = nombre;
-        this.cantidad = cantidad;
+        this.cantidad = 0; // Inicializar cantidad a 0
         this.id = GenerarId();
         this.estado = "disponible";
         this.precio = precio;
@@ -40,51 +40,58 @@ public class Producto {
         } else {
             return -idGenerado;
         }
-    } 
-    
-    public static void Producto(Producto Producto) {
-        Inventario.add(Producto);
+    }
+
+    public static void agregarProducto(Producto producto) {
+        Inventario.add(producto);
         System.out.println("Producto ingresado al inventario.");
     }
-        
-
 
     public static Producto buscarProducto(String nombre) {
-        for (Producto Producto : Inventario) {
-            if (Producto.nombre.equals(nombre)) {
-                return Producto;
+        for (Producto producto : Inventario) {
+            if (producto.nombre.equals(nombre)) {
+                return producto;
             }
         }
         return PRODUCTO_NO_ENCONTRADO;
-    } 
-    
-    public static ArrayList<Producto> listarProductoDisponibles() {
-        ArrayList<Producto> ProductoDisponibles = new ArrayList<>();
-        for (Producto Producto : Inventario) {
-            if (Producto.estado.equals("disponible")) {
-                ProductoDisponibles.add(Producto);
+    }
+
+    public static ArrayList<Producto> listarProductosDisponibles() {
+        ArrayList<Producto> productosDisponibles = new ArrayList<>();
+        for (Producto producto : Inventario) {
+            if (producto.estado.equals("disponible")) {
+                productosDisponibles.add(producto);
             }
         }
-        return ProductoDisponibles;
-    } 
-    
-    public static Producto modificarProducto(String nombre){
-        
-        
-        return PRODUCTO_NO_ENCONTRADO;       
+        return productosDisponibles;
     }
-    
-    public static Producto venderProducto(){
-        
-        return PRODUCTO_NO_ENCONTRADO;       
-    } 
-    
+
+    public static Producto modificarProducto(String nombre, int nuevoPrecio) {
+        Producto producto = buscarProducto(nombre);
+        if (producto != PRODUCTO_NO_ENCONTRADO) {
+            producto.precio = nuevoPrecio;
+            System.out.println("Producto modificado correctamente.");
+        } else {
+            System.out.println("Producto no encontrado.");
+        }
+        return producto;
+    }
+
+    public static void venderProducto(String nombre) {
+        Producto producto = buscarProducto(nombre);
+        if (producto != PRODUCTO_NO_ENCONTRADO) {
+            producto.estado = "vendido";
+            System.out.println("Producto vendido correctamente.");
+        } else {
+            System.out.println("Producto no encontrado.");
+        }
+    }
+
     public void mostrarInformacion() {
         System.out.println("ID: " + id);
         System.out.println("Cantidad: " + cantidad);
         System.out.println("Producto: " + nombre);
         System.out.println("Estado: " + estado);
         System.out.println("Precio: " + precio);
-    } 
-    
+    }
 }
